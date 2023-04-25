@@ -2,8 +2,9 @@ import pygame
 from settings import *
 from player import Player
 from overlay import Overlay
-from sprites import Generic
+from sprites import Generic, Water
 from pytmx.util_pygame import load_pygame
+from support import *
 
 class Level:
 	def __init__(self):
@@ -36,7 +37,9 @@ class Level:
 			Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
 
 		# Water
-
+		water_frames = import_folder('../graphics/water')
+		for x, y, surf in tmx_data.get_layer_by_name('Water').tiles():
+			Water((x * TILE_SIZE, y * TILE_SIZE), water_frames, self.all_sprites)
 		# Trees
 
 		# Wildflowers

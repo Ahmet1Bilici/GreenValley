@@ -19,13 +19,30 @@ class Level:
 		self.overlay = Overlay(self.player)
 
 	def setup(self):
+		# Map objects setup
 		tmx_data = load_pygame('../data/map.tmx')
 
-		# house
+		# House
 		for layer in ['HouseFloor', 'HouseFurnitureBottom']:
 			for x, y, surf in  tmx_data.get_layer_by_name(layer).tiles():
 				Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites, LAYERS['house bottom'])
 
+		for layer in ['HouseWalls', 'HouseFurnitureTop']:
+			for x, y, surf in  tmx_data.get_layer_by_name(layer).tiles():
+				Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+
+		# Fence
+		for x, y, surf in  tmx_data.get_layer_by_name('Fence').tiles():
+			Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
+
+		# Water
+
+		# Trees
+
+		# Wildflowers
+
+
+		# Player setup
 		self.player = Player((640, 360), self.all_sprites)
 		Generic(
 			pos = (0,0),

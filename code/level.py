@@ -6,6 +6,7 @@ from sprites import Generic, Water, WildFlower, Tree
 from pytmx.util_pygame import load_pygame
 from support import *
 
+
 class Level:
 	def __init__(self):
 
@@ -45,7 +46,13 @@ class Level:
 
 		# Trees
 		for obj in tmx_data.get_layer_by_name('Trees'):
-			Tree((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites, self.tree_sprites], obj.name)
+			Tree(
+				pos = (obj.x, obj.y),
+				surf = obj.image,
+				groups = [self.all_sprites, self.collision_sprites, self.tree_sprites],
+				name = obj.name,
+				player_add = self.player_add
+			)
 
 		# Wildflowers
 		for obj in tmx_data.get_layer_by_name('Decoration'):
@@ -69,6 +76,9 @@ class Level:
 			surf = pygame.image.load("../graphics/world/ground.png").convert_alpha(),
 			groups = self.all_sprites,
 			z = LAYERS['ground'])
+
+	def player_add(self, item):
+		self.player.item_inventory[item] += 1
 
 	def run(self,dt):
 		self.display_surface.fill('black')

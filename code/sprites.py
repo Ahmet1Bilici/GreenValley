@@ -18,7 +18,7 @@ class Interaction(Generic):
         surf = pygame.Surface(size)
         super().__init__(pos,surf,groups)
         self.name = name
-        
+
 
 
 class Water(Generic):

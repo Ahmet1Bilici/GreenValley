@@ -25,7 +25,6 @@ class Menu:
         self.index = 0
         self.timer = Timer(200)
 
-
     def display_money(self):
         text_surf = self.font.render(f'${self.player.money}', False, 'Black')
         text_rect = text_surf.get_rect(midbottom = (SCREEN_WIDTH/2, SCREEN_HEIGHT-20))
@@ -33,6 +32,7 @@ class Menu:
         pygame.draw.rect(self.display_surface, 'White', text_rect.inflate(10,10), 0, border_radius=6)
 
         self.display_surface.blit(text_surf,text_rect)
+
     def setup(self):
         # create text boxes
         self.text_surfs = []
@@ -89,7 +89,6 @@ class Menu:
             self.index = len(self.options) - 1
         if self.index > len(self.options) - 1:
             self.index = 0
-
 
     def show_entry(self, text_surf, amount, top, selected):
 

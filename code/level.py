@@ -11,6 +11,7 @@ from sky import Rain, Sky
 from random import randint
 from menu import Menu
 
+
 class Level:
 	def __init__(self):
 
@@ -37,6 +38,14 @@ class Level:
 		# shop
 		self.menu = Menu(self.player, self.toggle_shop)
 		self.shop_active = False
+
+		# music
+		self.success = pygame.mixer.Sound('../audio/success.wav')
+		self.success.set_volume(0.3)
+		self.music = pygame.mixer.Sound('../audio/music.mp3')
+		self.music.play(loops=-1)
+		self.music.set_volume(0.5)
+
 
 	def setup(self):
 		# Map objects setup
@@ -104,9 +113,9 @@ class Level:
 			groups = self.all_sprites,
 			z = LAYERS['ground'])
 
-
 	def player_add(self, item):
 		self.player.item_inventory[item] += 1
+		self.success.play()
 
 	def toggle_shop(self):
 		self.shop_active = not self.shop_active

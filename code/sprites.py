@@ -20,7 +20,6 @@ class Interaction(Generic):
         self.name = name
 
 
-
 class Water(Generic):
     def __init__(self, pos, frames, groups):
         # animation setup
@@ -50,6 +49,7 @@ class WildFlower(Generic):
         super().__init__(pos, surf, groups)
         self.hitbox = self.rect.copy().inflate(-20, -self.rect.height * 0.9)
 
+
 class Particle(Generic):
     def __init__(self, pos, surf, groups, z, duration = 200):
         super().__init__(pos,surf,groups,z)
@@ -77,7 +77,6 @@ class Tree(Generic):
         self.alive = True
         stump_path = f'../graphics/stumps/{"small" if name == "Small" else "large"}.png'
         self.stump_surf = pygame.image.load(stump_path).convert_alpha()
-        self.invul_timer = Timer(200)
 
         # apples
         self.apple_surf = pygame.image.load('../graphics/fruit/apple.png')
@@ -87,9 +86,15 @@ class Tree(Generic):
 
         self.player_add = player_add
 
+        # sounds
+        self.axe_sound = pygame.mixer.Sound('../audio/axe.mp3')
+
     def damage(self):
         # gives damages the tree
         self.health -= 1
+
+        # play sound
+        self.axe_sound.play()
 
         # remove an apple
         if len(self.apple_sprites.sprites()) > 0:
@@ -116,10 +121,10 @@ class Tree(Generic):
             self.alive = False
             self.player_add('wood')
 
-
     def update(self, dt):
         if self.alive:
             self.check_tree_death()
+
     def create_fruit(self):
         for pos in self.apple_pos:
             if randint(0, 10) < 2:

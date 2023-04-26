@@ -77,7 +77,7 @@ class Player(pygame.sprite.Sprite):
         self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split('_')[0]]
 
     def use_seed(self):
-        pass
+        self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
     def import_assets(self):
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
                            'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [],
@@ -87,7 +87,6 @@ class Player(pygame.sprite.Sprite):
         for animation in self.animations.keys():
             full_path = '../graphics/character/' + animation
             self.animations[animation] = import_folder(full_path)
-            print(self.animations)
 
     def animate(self, dt):
         self.frame_index += 4 * dt
@@ -139,14 +138,12 @@ class Player(pygame.sprite.Sprite):
                 self.timers['seed use'].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
-                print('use seed ')
 
             # Change seed
             if keys[pygame.K_e] and not self.timers['seed switch'].active:
                 self.timers['seed switch'].activate()
                 self.seed_index = (self.seed_index + 1) % len(self.seeds)
                 self.selected_seed = self.seeds[self.seed_index]
-                print(self.selected_seed)
 
             if keys[pygame.K_RETURN]:
                 collided_interaction_sprite = pygame.sprite.spritecollide(self,self.interaction,False)

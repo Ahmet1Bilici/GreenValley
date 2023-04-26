@@ -48,6 +48,10 @@ class Menu:
         self.menu_top = (SCREEN_HEIGHT / 2) - (self.total_height / 2)
         self.main_rect = pygame.Rect(((SCREEN_WIDTH / 2) - (self.width / 2)), self.menu_top, self.width, self.total_height)
 
+        # buy / sell text
+        self.buy_text = self.font.render('buy',False,'Black')
+        self.sell_text = self.font.render('sell',False,'Black')
+
     def input(self):
         # get the input
         keys = pygame.key.get_pressed()
@@ -56,7 +60,7 @@ class Menu:
         if keys[pygame.K_ESCAPE]:
             self.toggle_menu()
 
-        if not self.timer.active
+        if not self.timer.active:
             if keys[pygame.K_UP]:
                 self.index -= 1
                 self.timer.activate()
@@ -64,11 +68,28 @@ class Menu:
                 self.index += 1
                 self.timer.activate()
 
+            if keys[pygame.K_SPACE]:
+                self.timer.activate()
+
+                # get item
+                current_item = self.options[self.index]
+
+                if self.index <= self.sell_border:
+                    if self.player.item_inventory[current_item] > 0:
+                        self.player.item_inventory[current_item] -= 1
+                        self.player.money += SALE_PRICES[current_item]
+                else:
+                    seed_price = PURCHASE_PRICES[current_item]
+                    if self.player.money >= seed_price:
+                        self.player.seed_inventory[current_item] += 1
+                        self.player.money -= PURCHASE_PRICES[current_item]
+
         # end of list cases
         if self.index < 0:
             self.index = len(self.options) - 1
         if self.index > len(self.options) - 1:
             self.index = 0
+
 
     def show_entry(self, text_surf, amount, top, selected):
 
@@ -88,6 +109,14 @@ class Menu:
         # selected
         if selected:
             pygame.draw.rect(self.display_surface, 'Black', bg_rect,4,4)
+
+            # selling/buying
+            if self.index <= self.sell_border:
+                pos_rect = self.sell_text.get_rect(midleft = (self.main_rect.left + 150, bg_rect.centery))
+                self.display_surface.blit(self.sell_text, pos_rect)
+            else:
+                pos_rect = self.buy_text.get_rect(midleft=(self.main_rect.left + 150, bg_rect.centery))
+                self.display_surface.blit(self.buy_text, pos_rect)
 
     def update(self):
         self.input()
